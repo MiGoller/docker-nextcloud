@@ -1,0 +1,3 @@
+.vscode
+buildimage*.sh
+runcontainer*.sh
