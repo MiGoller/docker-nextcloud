@@ -1,5 +1,5 @@
 # About this custom image for Nextcloud
-This image is designed to be used in a micro-service environment with a so called "full" stack of features.
+This image is designed to be used in a micro-service environment including additional stacks of features.
 Many thanks to [Nextcloud](https://nextcloud.com/) for their great work!
 
 # What is Nextcloud?
@@ -19,12 +19,28 @@ The second option is a `fpm` container. It is based on the [php-fpm](https://hub
 
 ## Using the apache image
 The apache image contains a webserver and exposes port 80. To start the container type:
-
 ```console
 $ docker run -d -p 8080:80 migoller/nextcloud
 ```
 
 Now you can access Nextcloud at http://localhost:8080/ from your host system.
+
+You may mount volumes and set environment variables on the command line.
+```console
+$ docker run -it --name <container_name> \
+       --link <your_MySql_containter>:db_nextcloud \
+       -v <local_path_to_nextcloud_storage_folder>:/var/www/html/data \
+       -v <local_path_to_nextcloud_config_folder>/config:/var/www/html/config \
+       -v <local_path_to_nextcloud_config_folder>/apps:/var/www/html/custom_apps \
+       -e NEXTCLOUD_ADMIN_USER=<your_nextcloud_admin_username> \
+       -e NEXTCLOUD_ADMIN_PASSWORD=<your_nextcloud_admin_password> \
+       -e MYSQL_DATABASE=<your_MySql_database_name> \
+       -e MYSQL_USER=<your_MySql_username> \
+       -e MYSQL_PASSWORD=<your_MySql_password> \
+       -e MYSQL_HOST=db_nextcloud \
+       -p 8080:80 \
+       migoller/nextcloud
+```
 
 # Adding Features
 A lot of people want to use additional functionality inside their Nextcloud installation. If the image does not include the packages you need, you can easily build your own image on top of it.

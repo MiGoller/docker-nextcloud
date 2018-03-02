@@ -6,3 +6,6 @@ README.md
 Dockerfile*
 docker-compose*.yml
 runcontainer.sh
+apache
+fpm
+full
