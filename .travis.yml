@@ -10,6 +10,5 @@ jobs:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - docker build -f ./apache/Dockerfile -t docker-nextcloud-stage ./apache
       - docker images
-      - docker tag docker-nextcloud-stage $DOCKER_USERNAME/travistest:apache $DOCKER_USERNAME/travistest:latest
+      - docker tag docker-nextcloud-stage $DOCKER_USERNAME/travistest:apache
       - docker push $DOCKER_USERNAME/travistest:apache 
-      
