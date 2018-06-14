@@ -6,6 +6,9 @@ README.md
 Dockerfile*
 docker-compose*.yml
 runcontainer*.sh
-apache
-fpm
+build*.sh
+cron
 full
+imap
+smb
+preview
