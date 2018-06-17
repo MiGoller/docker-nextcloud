@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+# Parse image name for repo name
+tagStart=$(expr index "$IMAGE_NAME" :)  
+repoName=${IMAGE_NAME:0:tagStart-1}
+
+# Get Nextcloud version from official Docker image
+export $(docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' nextcloud:apache | grep NEXTCLOUD_VERSION)
+# NEXTCLOUD_VERSION=....
+
+# Split NEXTCLOUD_VERSION for naming the tags
+version=( ${NEXTCLOUD_VERSION//./ } )
+# TAG naming: version="${version[0]}.${version[1]}.${version[2]}"
+
+# Tag and push image for each additional tag
+for tag in {"apache_${NEXTCLOUD_VERSION}","apache_${version[0]}.${version[1]}","apache_${version[0]}.",stable-apache,production-apache,stable,production}; do  
+    docker tag $IMAGE_NAME ${repoName}:${tag}
+    docker push ${repoName}:${tag}
+done
