@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #   ===========================================================================
-#       This is the post_push hook script for the essential apache build.
+#       This is the post_push hook script for the imap apache build.
 #   ===========================================================================
 
 set -e
@@ -19,7 +19,7 @@ version=( ${NEXTCLOUD_VERSION//./ } )
 # TAG naming: version="${version[0]}.${version[1]}.${version[2]}"
 
 # Tag and push image for each additional tag
-for tag in {"apache_${NEXTCLOUD_VERSION}","apache_${version[0]}.${version[1]}","apache_${version[0]}",stable-apache,production-apache,stable,production,latest}; do  
+for tag in {"apache-smb_${NEXTCLOUD_VERSION}","apache-smb_${version[0]}.${version[1]}","apache-smb_${version[0]}"}; do  
     docker tag $IMAGE_NAME ${repoName}:${tag}
     docker push ${repoName}:${tag}
 done
