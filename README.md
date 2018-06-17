@@ -57,7 +57,7 @@ The `docker-compose cli` can be used to manage a multi-container application. It
 
 Declare environment variables in `env-files` for easier reuse.
 
-Have a look at the [docker-compose example](../../examples/docker-compose) for further details and the example files. Ensure to provide different passwords to your containers!
+Have a look at the [docker-compose example](../../apache/examples/docker-compose) for further details and the example files. Ensure to provide different passwords to your containers!
 
 ### Create a docker-compose.yml to fit your needs
 First you will have to create a docker-compose.yml to match your local requirements. You may start with one of the example files and modify it.
