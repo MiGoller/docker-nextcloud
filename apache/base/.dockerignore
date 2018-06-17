@@ -7,8 +7,3 @@ Dockerfile*
 docker-compose*.yml
 runcontainer*.sh
 build*.sh
-cron
-full
-imap
-smb
-preview

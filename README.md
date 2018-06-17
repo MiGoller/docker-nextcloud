@@ -1,29 +1,37 @@
 # About this custom image for Nextcloud
-This image is designed to be used in a micro-service environment including additional stacks of features.
-Many thanks to [Nextcloud](https://nextcloud.com/) for their great work!
+Here you find custom Docker images for [Nextcloud](https://nextcloud.com/) based on the [official Apache Docker image for Nextcloud](https://hub.docker.com/_/nextcloud/). Many thanks to the [Nextcloud](https://nextcloud.com/) devs for their great work!
 
 # What is Nextcloud?
-[![Build Status update.sh](https://doi-janky.infosiftr.net/job/update.sh/job/nextcloud/badge/icon)](https://doi-janky.infosiftr.net/job/update.sh/job/nextcloud)
-[![Build Status Travis](https://travis-ci.org/nextcloud/docker.svg?branch=master)](https://travis-ci.org/nextcloud/docker)
-
 A safe home for all your data. Access & share your files, calendars, contacts, mail & more from any device, on your terms.
 
 ![logo](https://cdn.rawgit.com/nextcloud/docker/57b5e03f2abe51f81aa9a5c80018d10b5ed1c353/logo.svg)
 
+# Supported tags
+Right now the Apache based tags for the Nextcloud Docker image are supported.
+
+The `apache` tag contains an essential Nextcloud installation including an apache web server. It is designed to be easy to use and get's you running pretty fast. This is also the default for the `latest` tag and version tags that are not further specified.
+
+You have to choose between the different flavours:
+*   `apache` extends the [official Apache Docker image for Nextcloud](https://hub.docker.com/_/nextcloud/) by the recommended PHP-settings and the recommended cron-job running Nextcloud's ```cron.php``` every 15 minutes.
+*   `imap` adds IMAP-authentication capabilities to my `apache` images.
+*   `smb` adds SAMBA-authentication capabilities to my `apache` images.
+*   `preview` adds imagik-based file preview capabilities to my `apache` images for pictures and videos. Libre Office is not included.
+*   `full` extends my `apache` images with all capabilities from the `imap`, `smb` and `preview` flavours.
+
 # How to use this image
-This image is designed to be used in a micro-service environment. There are two versions of the image you can choose from.
+This image is designed to run in a micro-service environment.
 
-The `apache` tag contains a full Nextcloud installation including an apache web server. It is designed to be easy to use and get's you running pretty fast. This is also the default for the `latest` tag and version tags that are not further specified.
+I encourage you to create volumes or to mount local folders for Nextcloud's data, configuration and apps. Otherwise you will loose your data and configuration when removing the container.
 
-The second option is a `fpm` container. It is based on the [php-fpm](https://hub.docker.com/_/php/) image and runs a fastCGI-Process that serves your Nextcloud page. To use this image it must be combined with any webserver that can proxy the http requests to the FastCGI-port of the container.
+If you are interested in how to run Docker containers using `docker-compose` or `docker run ...` and `systemd`, pleas have a look at https://github.com/MiGoller/dc-systemd-template .
 
-## Using the apache image
+## Simply dock Nextcloud with docker run
 The apache image contains a webserver and exposes port 80. To start the container type:
 ```console
 $ docker run -d -p 8080:80 migoller/nextcloud
 ```
 
-Now you can access Nextcloud at http://localhost:8080/ from your host system.
+Now you can access Nextcloud at http://localhost:8080/ from your host system, but you need access to an existing MySQL server.
 
 You may mount volumes and set environment variables on the command line.
 ```console
@@ -42,31 +50,85 @@ $ docker run -it --name <container_name> \
        migoller/nextcloud
 ```
 
+## Compose your own Nextcloud stack
+As mentioned before the `apache` images contain an Apache webserver, but they do not inclunde an DBMS like MySQL or MariaDB. You can easily create, deploy and run your own Nextcloud stack with docker compose.
+
+The `docker-compose cli` can be used to manage a multi-container application. It also moves many of the options you would enter on the `docker run cli` into the `docker-compose.yml` file for easier reuse. See this [documentation on docker-compose](https://docs.docker.com/compose/overview/) for more details.
+
+Declare environment variables in `env-files` for easier reuse.
+
+Have a look at the [docker-compose example](./examples/docker-compose) for further details and the example files. Ensure to provide different passwords to your containers!
+
+### Create a docker-compose.yml to fit your needs
+First you will have to create a docker-compose.yml to match your local requirements. You may start with one of the example files and modify it.
+```yaml
+version: '2'
+services:
+  db:
+    image: mysql
+    env_file:
+      - MySQL.env
+    volumes:
+      - ./datadir:/var/lib/mysql
+  app:
+    image: migoller/nextcloud:apache
+    env_file:
+      - MySQL.env
+      - Nextcloud.env
+    volumes:
+      - ./data:/var/www/html/data
+      - ./config:/var/www/html/config
+      - ./apps:/var/www/html/custom_apps
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+```
+Adjust the volumes' local pathes to fit your local system. Environment variables are defined at the env-files; so we're able to define them once and to use them within both containers at runtime.
+
+### Start you Nextcloud stack powered by docker-compose
+To start our stack you will just have to issue the following command in the path where the `docker-compose.yml` exists.
+```console
+$ docker-compose up -d
+```
+
+### Stop your docker-compose powered stack
+Well that's as easy as to start the stack.
+```console
+$ docker-compose down
+```
+
 # Adding Features
 A lot of people want to use additional functionality inside their Nextcloud installation. If the image does not include the packages you need, you can easily build your own image on top of it.
 Start your derived image with the `FROM` statement and add whatever you like.
 
 ```yaml
-FROM nextcloud:apache
+FROM migoller/nextcloud
 
 RUN ...
 
 ```
 The [examples folder](https://github.com/nextcloud/docker/blob/master/.examples) gives a few examples on how to add certain functionalities, like including the cron job, smb-support or imap-authentication. 
 
-This image provides a [Nextcloud 12 full image](https://github.com/nextcloud/docker/tree/master/.examples) with support for:
-*   Cron jobs
-*   Support for SMB/CIFS shares
-*   IMAP-authentication
-*   Preview of images and videos
-
-For further details please have a look at [Nextcloud 12 full image Dockerfile](https://github.com/nextcloud/docker/blob/master/.examples/dockerfiles/full/apache/Dockerfile).
+For further details please have a look at [Nextcloud full image Dockerfile](https://github.com/nextcloud/docker/blob/master/.examples/dockerfiles/full/apache/Dockerfile).
 
 # Auto configuration via environment variables
 The nextcloud image supports auto configuration via environment variables. You can preconfigure everything that is asked on the install page on first run. To enable auto configuration, set your database connection via the following environment variables. ONLY use one database type!
 
 ## Official Nextcloud environment variables
 For a list of environment variables for the official Nextcloud docker image please have a look at https://github.com/nextcloud/docker#auto-configuration-via-environment-variables.
+
+### Nextcloud administrator
+* `NEXTCLOUD_ADMIN_USER` sets the username for your Nextcloud's administrator account.
+* `NEXTCLOUD_ADMIN_PASSWORD` should be set to a really complex password for your Nextcloud's administrator account.
+
+### MySQL configuration
+* `MYSQL_USER` sets the MySQL username for runtime access to the database.
+* `MYSQL_PASSWORD` should be set to a complex password for the `MYSQL_USER` account.
+* `MYSQL_HOST` sets the hostname of the remote MySQL server.
+* `MYSQL_DATABASE` sets Nextcloud's database name.
+* `MYSQL_ROOT_USER` sets the username of your MySQL servers root user account. In most cases this setting will remain "root".
+* `MYSQL_ROOT_PASSWORD` sets the password for the MySQL.
 
 ## Additional environment variables
 In the future this custom image will support configuration via environment variables for:

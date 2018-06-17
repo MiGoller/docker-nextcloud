@@ -1,0 +1,22 @@
+version: '2'
+services:
+  db:
+    image: mysql
+    env_file:
+      - MySQL.env
+    volumes:
+      - ./datadir:/var/lib/mysql
+  app:
+    image: migoller/nextcloud:apache
+    env_file:
+      - MySQL.env
+      - Nextcloud.env
+    volumes:
+      - ./data:/var/www/html/data
+      - ./config:/var/www/html/config
+      - ./apps:/var/www/html/custom_apps
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+  
