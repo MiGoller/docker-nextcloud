@@ -2,7 +2,7 @@
 # Builds a custom docker image for latest Nextcloud SMB Apache
 #
 
-FROM migoller/nextcloud:apache
+FROM migoller/nextcloud:13-apache
 
 LABEL description="A server software for creating file hosting services" \
       Author="MiGoller"

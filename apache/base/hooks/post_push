@@ -19,7 +19,7 @@ version=( ${NEXTCLOUD_VERSION//./ } )
 # TAG naming: version="${version[0]}.${version[1]}.${version[2]}"
 
 # Tag and push image for each additional tag
-for tag in {"${NEXTCLOUD_VERSION}-apache","${version[0]}.${version[1]}-apache","${version[0]}-apache",stable-apache,production-apache,stable,production,latest}; do  
+for tag in {"${NEXTCLOUD_VERSION}-apache","${version[0]}.${version[1]}-apache","${version[0]}-apache",13-stable-apache,13-production-apache,13-stable,13-production,13-latest}; do  
     docker tag $IMAGE_NAME ${repoName}:${tag}
     docker push ${repoName}:${tag}
 done

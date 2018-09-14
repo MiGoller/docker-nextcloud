@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build -t migoller/nextcloud:apache-full .
+docker build -t migoller/nextcloud:13-apache-full .

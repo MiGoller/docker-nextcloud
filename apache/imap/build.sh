@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build -t migoller/nextcloud:apache-imap .
+docker build -t migoller/nextcloud:13-apache-imap .

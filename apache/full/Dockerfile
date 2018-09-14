@@ -2,7 +2,7 @@
 # Builds a custom docker image for latest Nextcloud Full Apache
 #
 
-FROM migoller/nextcloud:apache-preview
+FROM migoller/nextcloud:13-apache-preview
 
 LABEL description="A server software for creating file hosting services" \
       Author="MiGoller"
