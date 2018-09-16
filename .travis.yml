@@ -3,6 +3,16 @@ sudo: required
 services:
   - docker
 
+# blocklist
+branches:
+  except:
+  - master
+
+# safelist
+branches:
+  only:
+  - v13
+
 jobs:
   include:
     - stage: Build Apache docker image
