@@ -13,18 +13,16 @@ branches:
   only:
   - v13
 
+env:
+  - DOCKER_REPOSITORY=travistest
+
 jobs:
   include:
     - stage: Build Apache docker image - base
       script:
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -f ./apache/base/Dockerfile -t docker-nextcloud-$TRAVIS_BRANCH-base ./apache/base
+      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY "base"
     
     - stage: Build Apache docker image - preview
       script:
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -f ./apache/preview/Dockerfile -t docker-nextcloud-$TRAVIS_BRANCH-preview ./apache/preview
+      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY "preview"
 
-    - stage: Deploy images to Docker Hub
-      script:
-      - bash scripts/travisDeploy.sh
