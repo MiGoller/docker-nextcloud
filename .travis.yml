@@ -8,8 +8,8 @@ jobs:
     - stage: Build Apache docker image
       script:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -f ./apache/Dockerfile -t docker-nextcloud-stage ./apache
+      - docker build -f ./apache/base/Dockerfile -t docker-nextcloud-stage ./apache/base
       - docker images
-      - export $(docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' nextcloud:apache | grep NEXTCLOUD_VERSION)
-      - docker tag docker-nextcloud-stage $DOCKER_USERNAME/travistest:apache
-      - docker push $DOCKER_USERNAME/travistest:apache 
+      - export $(docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' nextcloud:13-apache | grep NEXTCLOUD_VERSION)
+      - docker tag docker-nextcloud-stage $DOCKER_USERNAME/travistest:13-apache
+      - docker push $DOCKER_USERNAME/travistest:13-apache 
