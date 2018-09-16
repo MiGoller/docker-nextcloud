@@ -25,9 +25,6 @@ jobs:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - docker build -f ./apache/preview/Dockerfile -t docker-nextcloud-$TRAVIS_BRANCH-preview ./apache/preview
 
-deploy:
-  # deploy v13 to DockerHub
-  - provider: script
-    script: bash scripts/travisDeploy.sh
-    on:
-      branch: v13
+    - stage: Deploy images to Docker Hub
+      script:
+      - bash scripts/travisDeploy.sh
