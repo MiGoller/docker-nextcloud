@@ -14,7 +14,7 @@ branches:
   - v13
 
 env:
-  - DOCKER_REPOSITORY=travistest
+  - DOCKER_REPOSITORY=nextcloud
 
 jobs:
   include:
@@ -25,4 +25,3 @@ jobs:
     - stage: Build Apache docker image - preview
       script:
       - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY preview
-
