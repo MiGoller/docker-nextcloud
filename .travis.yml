@@ -20,9 +20,9 @@ jobs:
   include:
     - stage: Build Apache docker image - base
       script:
-      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY "base"
+      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY base
     
     - stage: Build Apache docker image - preview
       script:
-      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY "preview"
+      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY preview
 

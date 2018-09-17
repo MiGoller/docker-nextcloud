@@ -13,6 +13,9 @@ docker images
 
 export $(docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' $1-$TRAVIS_BRANCH-$2 | grep NEXTCLOUD_VERSION)
 
+# Split NEXTCLOUD_VERSION for naming the tags
+version=( ${NEXTCLOUD_VERSION//./ } )
+
 #   Define tag suffix
 case "$2" in
  base) export TAG_SUFFIX="-apache" ;;
