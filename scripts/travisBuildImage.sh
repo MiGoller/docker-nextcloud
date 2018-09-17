@@ -17,11 +17,11 @@ export $(docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' $1-
 version=( ${NEXTCLOUD_VERSION//./ } )
 
 #   Define tag suffix
+echo "Image type: $2."
 case "$2" in
  base) export TAG_SUFFIX="-apache" ;;
     *) export TAG_SUFFIX="-apache-$2" ;;
 esac
-export TAG_SUFFIX="-apache-$2"
 
 # Tag and push image for each additional tag
 for tag in {"${NEXTCLOUD_VERSION}","${version[0]}.${version[1]}","${version[0]}"}; do  
