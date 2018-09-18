@@ -29,3 +29,19 @@ for tag in {"${NEXTCLOUD_VERSION}","${version[0]}.${version[1]}","${version[0]}"
     docker tag $1-$TRAVIS_BRANCH-$2 $DOCKER_USERNAME/$1:${tag}$TAG_SUFFIX
     docker push $DOCKER_USERNAME/$1:${tag}$TAG_SUFFIX
 done
+
+#   Special tags to set?
+if [ ! -z "$3" ]
+then
+    SPECIAL_TAGS = $3
+    echo "Appying special tags to that image: $SPECIAL_TAGS."
+    # Split NEXTCLOUD_VERSION for naming the tags
+    MY_TAGS=( ${SPECIAL_TAGS//,/ } )
+    for tag in "${MY_TAGS[@]}"; do
+        for to_tag in {"${version[0]}-${MY_TAG}","${version[0]}-${MY_TAG}$TAG_SUFFIX"}; do
+            echo "--> Tagging docker image with special tag: $DOCKER_USERNAME/$1:${to_tag}"
+            docker tag $1-$TRAVIS_BRANCH-$2 $DOCKER_USERNAME/$1:${to_tag}
+            docker push $DOCKER_USERNAME/$1:${to_tag}
+        done
+    done
+fi
