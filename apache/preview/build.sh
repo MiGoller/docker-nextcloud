@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build -t migoller/nextcloud:13-apache-preview .
+docker build -t migoller/nextcloud:14-apache-preview .

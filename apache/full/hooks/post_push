@@ -11,7 +11,7 @@ tagStart=$(expr index "$IMAGE_NAME" :)
 repoName=${IMAGE_NAME:0:tagStart-1}
 
 # Get Nextcloud version from my preview Nextcloud Docker image
-export $(docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' migoller/nextcloud:13-apache-preview | grep NEXTCLOUD_VERSION)
+export $(docker inspect --format='{{range .Config.Env}}{{println .}}{{end}}' migoller/nextcloud:14-apache-preview | grep NEXTCLOUD_VERSION)
 # NEXTCLOUD_VERSION=....
 
 # Split NEXTCLOUD_VERSION for naming the tags
