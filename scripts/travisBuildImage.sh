@@ -33,7 +33,8 @@ done
 #   Special tags to set?
 if [ ! -z "$3" ]
 then
-    SPECIAL_TAGS = $3
+    SPECIAL_TAGS=($3)
+    
     echo "Appying special tags to that image: $SPECIAL_TAGS."
     # Split NEXTCLOUD_VERSION for naming the tags
     MY_TAGS=( ${SPECIAL_TAGS//,/ } )
