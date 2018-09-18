@@ -25,3 +25,11 @@ jobs:
     - stage: Build Apache docker image - preview
       script:
       - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY preview
+
+    - stage: Build Apache docker image - imap, smb, full
+      script:
+      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY imap
+      script:
+      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY smb
+      script:
+      - bash scripts/travisBuildImage.sh $DOCKER_REPOSITORY full
