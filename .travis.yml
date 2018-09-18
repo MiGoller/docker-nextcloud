@@ -11,7 +11,7 @@ branches:
 # safelist
 branches:
   only:
-  - v13
+  - v14
 
 env:
   - DOCKER_REPOSITORY=nextcloud
